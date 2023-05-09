@@ -5,7 +5,13 @@ import core.LanguageProcessors.Lexer;
 public class Core{
 
     public static void main(String[] arg){
-        Lexer lexer = new Lexer("if", 0);
-        System.out.println("->"+lexer.Tokenize().get(0).getTokenType());
+        //TESTING LEXER
+        Lexer lexer = new Lexer("print(1+2+\"hello\")", 0);
+        for(int i =0;i<lexer.Tokenize().size();i++){
+            System.out.println("->"+i);
+            System.out.println("->"+lexer.Tokenize().get(i).getToken());
+            System.out.println("->"+lexer.Tokenize().get(i).getTokenType());
+            System.out.println("->"+lexer.Tokenize().get(i).getKeyWordType());
+        }
     }
 }

@@ -19,6 +19,24 @@ public class Lexer{
         keywords.put("return", TokenType.RETURN);
         keywords.put("this", TokenType.THIS);
         keywords.put("String", TokenType.STRING);
+        keywords.put("int", TokenType.INT);
+        keywords.put("char", TokenType.CHAR);
+        keywords.put("float", TokenType.FLOAT);
+        keywords.put("double", TokenType.DOUBLE);
+        keywords.put("long", TokenType.LONG);
+        keywords.put("byte", TokenType.BYTE);
+        keywords.put("catch", TokenType.CATCH);
+        keywords.put("try", TokenType.TRY);
+        keywords.put("print", TokenType.PRINT);
+        keywords.put("input", TokenType.INPUT);
+        keywords.put("while", TokenType.WHILE);
+        keywords.put("do", TokenType.DO);
+        keywords.put("for", TokenType.FOR);
+        keywords.put("true", TokenType.TRUE);
+        keywords.put("false", TokenType.FALSE);
+        keywords.put("public", TokenType.PUBLIC);
+        keywords.put("private", TokenType.PRIVATE);
+        keywords.put("super", TokenType.SUPER);
     }
 
     public static String Command;
@@ -94,7 +112,7 @@ public class Lexer{
                             if(isDigit(Tokens[j])||Tokens[j].equals(".")){
                                 number=number+(Tokens[j]);
                                 i++;
-                            }
+                            }else break;
                         }
                     }
                     returnVal.add(setTokenValues(i, number, TokenType.NUMBER_LITERAL));
@@ -107,7 +125,7 @@ public class Lexer{
                             if(isAlpha(Tokens[j])){
                                 string=string+(Tokens[j]);
                                 i++;
-                            }
+                            }else break;
                         }
                     } 
                     

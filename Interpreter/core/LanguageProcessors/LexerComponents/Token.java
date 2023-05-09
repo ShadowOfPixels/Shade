@@ -34,4 +34,8 @@ public class Token {
     public String getToken(){
         return token;
     }
+
+    public TokenType getKeyWordType(){
+        return KeyWordType;
+    }
 }
