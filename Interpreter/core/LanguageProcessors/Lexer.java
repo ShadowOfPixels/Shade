@@ -8,11 +8,11 @@ import java.util.List;
 import core.LanguageProcessors.LexerComponents.Token;
 import core.LanguageProcessors.LexerComponents.TokenType;
 
-public class Lexer{
+public class Lexer {
 
-    public static HashMap<String,TokenType> keywords;
+    public static HashMap<String, TokenType> keywords;
 
-    static{
+    static {
         keywords = new HashMap<>();
         keywords.put("if", TokenType.IF);
         keywords.put("else", TokenType.ELSE);
@@ -41,15 +41,14 @@ public class Lexer{
 
     public static String Command;
     public static int LineNo;
-    List<String> KeyWords = Arrays.asList("","");
+    List<String> KeyWords = Arrays.asList("", "");
 
-    public Lexer(String Command,int LineNo){
-        this.Command=Command;
-        this.LineNo=LineNo;
+    public Lexer(String Command, int LineNo) {
+        this.Command = Command;
+        this.LineNo = LineNo;
     }
 
-    public static Token setTokenValues(int row,String Token,TokenType tokenType)
-    {
+    public static Token setTokenValues(int row, String Token, TokenType tokenType) {
         Token token = new Token();
         token.setCol(LineNo);
         token.setRow(row);
@@ -59,8 +58,7 @@ public class Lexer{
         return token;
     }
 
-    public static Token setTokenValues(int row,String Token,TokenType tokenType,TokenType KeyWordType)
-    {
+    public static Token setTokenValues(int row, String Token, TokenType tokenType, TokenType KeyWordType) {
         Token token = new Token();
         token.setCol(LineNo);
         token.setRow(row);
@@ -70,23 +68,21 @@ public class Lexer{
         return token;
     }
 
-    public static boolean isDigit(String i){
-        return Character.isDigit(i.toCharArray()[0])&&(!Character.isWhitespace(i.toCharArray()[0]));
+    public static boolean isDigit(String i) {
+        return Character.isDigit(i.toCharArray()[0]) && (!Character.isWhitespace(i.toCharArray()[0]));
     }
 
-    public static boolean isAlpha(String i){
-        return Character.isLetter(i.toCharArray()[0])&&(!Character.isWhitespace(i.toCharArray()[0]));
+    public static boolean isAlpha(String i) {
+        return Character.isLetter(i.toCharArray()[0]) && (!Character.isWhitespace(i.toCharArray()[0]));
     }
 
-    public static List<Token> Tokenize()
-    {
+    public static List<Token> Tokenize() {
         List<Token> returnVal = new ArrayList<>();
         String[] Tokens = Command.split("");
-        for(int i = 0;i<Tokens.length;i++)
-        {
+        for (int i = 0; i < Tokens.length; i++) {
             TokenType type = TokenType.NULL;
-            switch(Tokens[i]){
-                case "*","/","+","-" -> type = TokenType.ARITHEMATIC_OPERATORS;
+            switch (Tokens[i]) {
+                case "*", "/", "+", "-" -> type = TokenType.ARITHEMATIC_OPERATORS;
                 case "{" -> type = TokenType.OPEN_CURLY_BRACK;
                 case "}" -> type = TokenType.CLOSE_CURLY_BRACK;
                 case "]" -> type = TokenType.OPEN_BOX_BRACK;
@@ -101,38 +97,37 @@ public class Lexer{
                 case "!" -> type = TokenType.NOT;
             }
 
-            if(!type.equals(TokenType.NULL)){
+            if (!type.equals(TokenType.NULL)) {
                 returnVal.add(setTokenValues(i, Tokens[i], type));
-            }
-            else{
-                if(isDigit(Tokens[i])){
+            } else {
+                if (isDigit(Tokens[i])) {
                     String number = Tokens[i];
-                    if(i!=Tokens.length){
-                        for(int j=i+1;j<Tokens.length;j++){
-                            if(isDigit(Tokens[j])||Tokens[j].equals(".")){
-                                number=number+(Tokens[j]);
+                    if (i != Tokens.length) {
+                        for (int j = i + 1; j < Tokens.length; j++) {
+                            if (isDigit(Tokens[j]) || Tokens[j].equals(".")) {
+                                number = number + (Tokens[j]);
                                 i++;
-                            }else break;
+                            } else
+                                break;
                         }
                     }
                     returnVal.add(setTokenValues(i, number, TokenType.NUMBER_LITERAL));
-                }
-                else if(isAlpha(Tokens[i])){
+                } else if (isAlpha(Tokens[i])) {
                     String string = Tokens[i];
 
-                    if(i!=Tokens.length){
-                        for(int j=i+1;j<Tokens.length;j++){
-                            if(isAlpha(Tokens[j])){
-                                string=string+(Tokens[j]);
+                    if (i != Tokens.length) {
+                        for (int j = i + 1; j < Tokens.length; j++) {
+                            if (isAlpha(Tokens[j])) {
+                                string = string + (Tokens[j]);
                                 i++;
-                            }else break;
+                            } else
+                                break;
                         }
-                    } 
-                    
-                    if(keywords.get(string)!=null){
-                        returnVal.add(setTokenValues(i, string, TokenType.KEYWORD,keywords.get(string)));
                     }
-                    else{
+
+                    if (keywords.get(string) != null) {
+                        returnVal.add(setTokenValues(i, string, TokenType.KEYWORD, keywords.get(string)));
+                    } else {
                         returnVal.add(setTokenValues(i, string, TokenType.STRING_LITERAL));
                     }
                 }
