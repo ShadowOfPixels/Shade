@@ -11,6 +11,7 @@
             "mainClass": "${file}"
         },
         {
+            "console": "internalConsole",
             "type": "java",
             "name": "Core",
             "request": "launch",

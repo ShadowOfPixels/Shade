@@ -4,7 +4,7 @@ public class Token {
 
     private int row;
     private int col;
-    private String token;
+    private Object token;
     private TokenType tokentype;
     private TokenType KeyWordType;
 
@@ -20,7 +20,7 @@ public class Token {
         col = i;
     }
 
-    public void setToken(String tokens) {
+    public void setToken(Object tokens) {
         token = tokens;
     }
 
@@ -32,7 +32,7 @@ public class Token {
         return tokentype;
     }
 
-    public String getToken() {
+    public Object getToken() {
         return token;
     }
 

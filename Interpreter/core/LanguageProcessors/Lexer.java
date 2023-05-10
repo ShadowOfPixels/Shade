@@ -1,9 +1,6 @@
 package core.LanguageProcessors;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import core.ErrorHandling.ErrorHandler;
 import core.LanguageProcessors.LexerComponents.Token;
@@ -45,7 +42,7 @@ public class Lexer {
     public static ErrorHandler handler;
     List<String> KeyWords = new ArrayList<>();
 
-    public Lexer(String Command, int LineNo,ErrorHandler handler) {
+    public Lexer(String Command, int LineNo, ErrorHandler handler) {
         this.handler = handler;
         this.Command = Command;
         this.LineNo = LineNo;
@@ -61,7 +58,10 @@ public class Lexer {
         return token;
     }
 
-    public static Token setTokenValues(int row, String Token, TokenType tokenType, TokenType KeyWordType) {
+    public static void skip() {
+    }
+
+    public static Token setTokenValues(int row, Object Token, TokenType tokenType, TokenType KeyWordType) {
         Token token = new Token();
         token.setCol(LineNo);
         token.setRow(row);
@@ -86,16 +86,46 @@ public class Lexer {
             TokenType type = TokenType.NULL;
             switch (Tokens[i]) {
                 case "*", "/", "+", "-" -> type = TokenType.ARITHEMATIC_OPERATORS;
+                case " ", "\t", "\r" -> skip();
                 case "{" -> type = TokenType.OPEN_CURLY_BRACK;
                 case "}" -> type = TokenType.CLOSE_CURLY_BRACK;
                 case "]" -> type = TokenType.OPEN_BOX_BRACK;
                 case "[" -> type = TokenType.CLOSE_BOX_BRACK;
                 case "(" -> type = TokenType.OPEN_PARENS;
                 case ")" -> type = TokenType.CLOSED_PARENS;
+                case "\"" -> {
+                    ++i;
+                    for (int k = i; k < Tokens.length; k++) {
+                        if (Tokens[k].equals("\"")) {
+                            String string = Command.substring(i, k);
+                            returnVal.add(setTokenValues(i, string, TokenType.STRING_LITERAL, keywords.get(string)));
+                            i = k + 1;
+                            type = TokenType.END;// pseudo value
+                            break;
+                        } else if (k == Tokens.length - 1) {
+                            Token unnecessaryToken = new Token();
+                            unnecessaryToken.setToken(Tokens[i]);
+                            unnecessaryToken.setRow(k);
+                            handler.error(LineNo, unnecessaryToken, Command, "Unterminating String Literal ", false);
+                            return null;
+                        }
+                    }
+                }
+                case "\'" -> {
+                    if (Tokens[i + 2].equals("\'")) {
+                        System.out.println(i);
+                        returnVal.add(setTokenValues(i, Tokens[i + 1], TokenType.KEYWORD, TokenType.CHARACTER_LITERAL));
+                        i = i + 3;
+                        type = TokenType.END;// pseudo value
+                    } else {
+                        Token unnecessaryToken = new Token();
+                        unnecessaryToken.setRow(i + 2);
+                        handler.error(LineNo, unnecessaryToken, Command, "Unterminating Character Literal ", false);
+                        return null;
+                    }
+                }
                 case "=" -> type = TokenType.EQUALS;
                 case ";" -> type = TokenType.END;
-                case "\'" -> type = TokenType.SINGLE_QUOTES;
-                case "\"" -> type = TokenType.DOUBLE_QUOTES;
                 case "," -> type = TokenType.COMMA;
                 case "!" -> type = TokenType.NOT;
             }
@@ -117,28 +147,29 @@ public class Lexer {
                     returnVal.add(setTokenValues(i, number, TokenType.NUMBER_LITERAL));
                 } else if (isAlpha(Tokens[i])) {
                     String string = Tokens[i];
-
                     if (i != Tokens.length) {
                         for (int j = i + 1; j < Tokens.length; j++) {
                             if (isAlpha(Tokens[j])) {
-                                string = string + (Tokens[j]);
-                                i++;
+                                ++i;
+                                string += (Tokens[i]);
                             } else
                                 break;
                         }
                     }
-
                     if (keywords.get(string) != null) {
                         returnVal.add(setTokenValues(i, string, TokenType.KEYWORD, keywords.get(string)));
                     } else {
-                        returnVal.add(setTokenValues(i, string, TokenType.STRING_LITERAL));
+                        Token unnecessaryToken = new Token();
+                        unnecessaryToken.setToken(Tokens[i]);
+                        unnecessaryToken.setRow(Command.length() - string.length() / 2);
+                        handler.error(LineNo, unnecessaryToken, Command, "Unecessary Hanging String " + string, true);
+                        return null;
                     }
-                }
-                else if(!Tokens[i].isBlank()){
+                } else {
                     Token unnecessaryToken = new Token();
                     unnecessaryToken.setToken(Tokens[i]);
                     unnecessaryToken.setRow(i);
-                    handler.error(LineNo,i+1,unnecessaryToken,Command,"Unnecessay character present at ");
+                    handler.error(LineNo, unnecessaryToken, Command, "Unnecessary character present at ", true);
                     return null;
                 }
             }
