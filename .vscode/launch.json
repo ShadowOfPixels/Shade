@@ -16,7 +16,7 @@
             "request": "launch",
             "mainClass": "core.Core",
             "projectName": "Shade_1ca670d5",
-            "args": ["34","35","36"]
+            "args": ["/Users/sheshikanth/Documents/GitHub/Shade/Interpreter/core/resources/test.shade"]
         }
     ]
 }

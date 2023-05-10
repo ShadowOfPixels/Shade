@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import core.ErrorHandling.ErrorHandler;
 import core.LanguageProcessors.LexerComponents.Token;
 import core.LanguageProcessors.LexerComponents.TokenType;
 
@@ -41,9 +42,11 @@ public class Lexer {
 
     public static String Command;
     public static int LineNo;
-    List<String> KeyWords = Arrays.asList("", "");
+    public static ErrorHandler handler;
+    List<String> KeyWords = new ArrayList<>();
 
-    public Lexer(String Command, int LineNo) {
+    public Lexer(String Command, int LineNo,ErrorHandler handler) {
+        this.handler = handler;
         this.Command = Command;
         this.LineNo = LineNo;
     }
@@ -130,6 +133,13 @@ public class Lexer {
                     } else {
                         returnVal.add(setTokenValues(i, string, TokenType.STRING_LITERAL));
                     }
+                }
+                else if(!Tokens[i].isBlank()){
+                    Token unnecessaryToken = new Token();
+                    unnecessaryToken.setToken(Tokens[i]);
+                    unnecessaryToken.setRow(i);
+                    handler.error(LineNo,i+1,unnecessaryToken,Command,"Unnecessay character present at ");
+                    return null;
                 }
             }
         }

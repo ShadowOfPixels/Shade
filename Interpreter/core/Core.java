@@ -9,14 +9,18 @@ import java.util.List;
 import java.util.Scanner;
 import java.nio.charset.Charset;
 
+import core.ErrorHandling.ErrorHandler;
 import core.LanguageProcessors.Lexer;
 import core.LanguageProcessors.LexerComponents.Token;
 
 public class Core {
 
+    static ErrorHandler handler = new ErrorHandler();
+
     private static void runFile(String path) throws IOException {
         byte[] bytes = Files.readAllBytes(Paths.get(path));
-        run(new String(bytes, Charset.defaultCharset()));
+        String command = new String(bytes, Charset.defaultCharset());
+        run(command,command.lines().toArray().length);
     }
 
     private static void runPrompt() throws IOException {
@@ -29,29 +33,28 @@ public class Core {
             if (line == null)
                 break;
             else{
-                run(line);
+                run(line,i);
             }
         }
     }
 
-    private static void run(String source) {
-        Lexer lexer = new Lexer(source, 0);
+    private static void run(String source,int LineNo) {
+        Lexer lexer = new Lexer(source, LineNo,handler);
         List<Token> lexerOut = lexer.Tokenize();
 
-        for (Token token : lexerOut) {
-            System.out.println("***********************");
-            System.out.println("->" + token.getToken());
-            System.out.println("->" + token.getTokenType());
-            System.out.println("->" + token.getKeyWordType());
+        if(lexerOut!= null){
+            for (Token token : lexerOut) {
+                System.out.println("************TOKENS***********");
+                System.out.println("->" + token.getToken());
+                System.out.println("->" + token.getTokenType());
+                System.out.println("->" + token.getKeyWordType());
+            }
         }
-    }
-
-    private void error(int line){
-
     }
 
     public static void main(String[] args) throws IOException {
         // TESTING LEXER
+        System.out.println(args.length);
         if (args.length < 1) {
             System.out.println("usage: JShade [Script]");
             System.exit(64);

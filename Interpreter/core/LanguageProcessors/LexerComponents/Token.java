@@ -39,4 +39,8 @@ public class Token {
     public TokenType getKeyWordType() {
         return KeyWordType;
     }
+
+    public int getRow() {
+        return row;
+    }
 }
