@@ -45,22 +45,18 @@ public class Core {
     }
 
     private static void run(String source, int totalLines) {
+        Lexer lexer = new Lexer(source, handler);
         List<Token> lexerOut = new ArrayList<>();
-        for (int i = 0; i < source.lines().toArray().length; i++) {
-            Lexer lexer = new Lexer(source.lines().toArray()[i].toString(), i, handler);
-            if (lexer.Tokenize() != null) {
-                lexerOut.addAll(lexer.Tokenize());
-            } else {
-                return;
-            }
+        if(lexer.Tokenize()!=null){
+            lexerOut.addAll(lexer.Tokenize());
         }
-
+        
         if (lexerOut != null) {
             for (Token token : lexerOut) {
                 System.out.println("************TOKENS***********");
-                System.out.println("->" + token.getToken());
-                System.out.println("->" + token.getTokenType());
-                System.out.println("->" + token.getKeyWordType());
+                System.out.println("-> " + token.getToken());
+                System.out.println("-> " + token.getTokenType());
+                System.out.println("-> " + token.getKeyWordType());
             }
         }
     }

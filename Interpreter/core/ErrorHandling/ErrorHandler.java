@@ -11,9 +11,9 @@ public class ErrorHandler {
 
     private static void report(int line, Token token, String command, String msg, boolean arg) {
         Core.hadError = true;
-
+        String Line = command.lines().toArray()[line].toString();
         System.err.println("[Error] " + msg);
-        System.err.println("    " + line + "|" + command);
+        System.err.println("    " + line + "|" + Line);
         int tokenPoint = ("    " + line + "|").length() + token.getRow();
         if (arg) {
             String arrow = "";
