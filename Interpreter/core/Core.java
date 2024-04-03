@@ -46,7 +46,7 @@ public class Core {
 
     private static void run(String source, int totalLines) {
         Lexer lexer = new Lexer(source, handler);
-        List<Token> lexerOut = new ArrayList<>();
+        /*List<Token> lexerOut = new ArrayList<>();
         if(lexer.Tokenize()!=null){
             lexerOut.addAll(lexer.Tokenize());
         }
@@ -58,7 +58,7 @@ public class Core {
                 System.out.println("-> " + token.getTokenType());
                 System.out.println("-> " + token.getKeyWordType());
             }
-        }
+        }*/
     }
 
     public static void main(String[] args) throws IOException {
