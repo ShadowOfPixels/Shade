@@ -6,18 +6,23 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Current File",
+            "name": "Launch with Arguments Prompt",
             "request": "launch",
-            "mainClass": "${file}"
+            "mainClass": "",
+            "args": "Interpreter/core/resources/test.shade"
         },
         {
-            "console": "internalConsole",
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "core.Core"
+        },
+        {
             "type": "java",
             "name": "Core",
             "request": "launch",
             "mainClass": "core.Core",
-            "projectName": "Shade_1ca670d5",
-            "args": ["/Users/sheshikanth/Documents/GitHub/Shade/Interpreter/core/resources/test.shade"]
+            "projectName": "Shade_869220d7"
         }
     ]
 }
