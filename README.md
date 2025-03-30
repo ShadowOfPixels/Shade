@@ -1,4 +1,4 @@
-<a href="url"><img src="https://github.com/ShadowOfPixels/Shade/blob/main/pixil-frame-0.png" align="left" height="48" width="48" ></a>
+<a href="url"><img src="https://github.com/ShadowOfPixels/Shade/blob/main/pixil-frame-0.png" align="left" height="64" width="64" ></a>
 # Shade
 
 A robust programming language made using C and Java
