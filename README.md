@@ -1,4 +1,5 @@
 # Shade
+![pixil-frame-0](https://github.com/user-attachments/assets/1cac3645-f921-4f44-b175-d2b268a6532c)
 
 A robust programming language made using C and Java
 
